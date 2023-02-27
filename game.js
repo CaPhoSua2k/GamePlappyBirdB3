@@ -2,7 +2,7 @@ const cvs = document.getElementById("bird");
 const ctx = cvs.getContext("2d");
 
 let frames = 0;
-
+const DEGREE = Math.PI/180;
 
 const sprite = new Image();
 sprite.src = "img/sprite.png";
@@ -62,6 +62,7 @@ const fg = {
         ctx.drawImage(sprite, this.sX, this.sY, this.w, this.h, this.x + this.w, this.y, this.w, this.h);
     },
 
+    // chuyển động chính
     update: function () {
         if (state.current == state.game) {
             this.x = (this.x - this.dx) % (this.w / 2);
@@ -90,8 +91,11 @@ const bird = {
 
     draw: function () {
         let bird = this.animation[this.frame];
-
-        ctx.drawImage(sprite, bird.sX, bird.sY, this.w, this.h, this.x - this.w / 2, this.y - this.h / 2, this.w, this.h);
+        ctx.save();
+        ctx.translate(this.x,this.y); // chuyển động chính
+        ctx.rotate(this.rotation); // chuyển động chính
+        ctx.drawImage(sprite, bird.sX, bird.sY, this.w, this.h, - this.w / 2, - this.h / 2, this.w, this.h);
+        ctx.restore();
     },
     flap: function () {
         // if (state.current == state.getReady) {
@@ -110,7 +114,7 @@ const bird = {
 
         if(state.current == state.getReady){
             this.y = 150; 
-            //this.rotation = 0 * DEGREE;
+            this.rotation = 0 * DEGREE; // chuyển động chính
         }else{
             this.speed += this.gravity;
             this.y += this.speed;
@@ -122,15 +126,14 @@ const bird = {
                     
                 }
             }
+            // Nếu tốc độ lớn hơn độ nhảy thì thua 
+            if(this.speed >= this.jump){
+                this.rotation = 90 * DEGREE;
+                this.frame=1;
+            }else{
+                this.rotation = -25 * DEGREE;
+            }
         }
-
-
-
-
-
-
-
-
 
     }
 
@@ -176,6 +179,7 @@ function draw() {
     bird.draw();
     getReady.draw();
     gameOver.draw();
+    //
 
 
 }
@@ -183,6 +187,7 @@ function draw() {
 // UPDATE
 function update() {
     bird.update();
+    fg.update(); // chuyển động chính
 
 }
 
