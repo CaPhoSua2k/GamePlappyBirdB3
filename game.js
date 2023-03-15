@@ -70,6 +70,7 @@ const fg = {
     }
 }
 
+
 const bird = {
     animation: [
         { sX: 276, sY: 112 },
