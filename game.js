@@ -31,6 +31,15 @@ const state = {
     game: 1,
     over: 2
 }
+
+// Button start
+const startBtn ={
+    x : 120,
+    y : 263,
+    w : 83,
+    h: 29,
+
+}
 // CONTROL THE GAME
 cvs.addEventListener("click", function (evt) {
     switch (state.current) {
@@ -41,7 +50,18 @@ cvs.addEventListener("click", function (evt) {
             bird.flap();
             break;
         case state.over:
-            state.current = state.getReady;
+            let rect = cvs.getBoundingClientRect();
+            let clickX = evt.clientX - rect.left;
+            let clickY = evt.clientY - rect.top;
+
+            //  kiểm tra nếu nhấn nut start
+            if(clickX >= startBtn.x  && clickX <= startBtn.x + startBtn.w && clickY >= startBtn.y && clickY <= startBtn.y + startBtn.h){
+                pipes.reset();
+                bird.speedReset();
+                score.reset();
+                state.current = state.getReady;
+            }
+            
             break;
     }
 });
@@ -82,7 +102,7 @@ const bird = {
     y: 150,
     w: 34,
     h: 26,
-
+    radius: 12,
     frame: 0,
 
     gravity : 0.25,
@@ -136,8 +156,10 @@ const bird = {
             }
         }
 
+    },
+    speedReset : function(){
+        this.speed = 0;
     }
-
 }
 
 const getReady = {
@@ -212,9 +234,60 @@ const pipes = {
         }
         for(let i = 0; i < this.position.length; i++){
             let p = this.position[i];
-            p.x -= this.dx;
+           
+            let bottomPipeYPos = p.y + this.h+ this.gap;
+            //  COLLISION DETECTION
+            // TOP PIPE
+            if(bird.x + bird.radius > p.x && bird.x - bird.radius < p.x + this.w
+                && bird.y + bird.radius > p.y && bird.y - bird.radius < p.y + this.h){
+                    state.current = state.over;
+                }
+                // Bottom pipe 
+            if(bird.x + bird.radius > p.x && bird.x - bird.radius < p.x + this.w
+                && bird.y + bird.radius > bottomPipeYPos && bird.y - bird.radius < bottomPipeYPos + this.h){
+                    state.current = state.over;
+                } 
+                // Move the pipes to the left 
+                p.x -= this.dx;
+            // Nếu 
+            if(p.x + this.w <= 0){
+                this.position.shift();
+                score.value += 1;
+
+                score.best = Math.max(score.value, score.best);
+                localStorage.setItem("best", score.best);
+            }
         }
-    }
+    },
+    reset : function(){
+        this.position = [];
+}
+}
+// Tính điểm
+const score ={
+    best : parseInt(localStorage.getItem("best")) || 0,
+    value : 0,
+    draw : function(){
+        ctx.fillStyle = "#FFF";
+        ctx.strokeStyle ="#000";
+        if(state.current == state.game){
+            ctx.lineWidth = 2;
+            ctx.font = "35px Teko";
+            ctx.fillText(this.value,cvs.width/2, 50);
+            ctx.strokeText(this.value, cvs.width/2,50);
+        }else if(state.current == state.over){
+            // giá trị điểm
+            ctx.font = "25px Teko";
+            ctx.fillText(this.value,225,186);
+            ctx.strokeText(this.value, 225,186);
+            // điểm lớn nhất
+            ctx.fillText(this.best,225, 228);
+            ctx.strokeText(this.best,225,228);
+        }
+    },
+    reset : function(){
+        this.value = 0;
+}
 }
             
 //DrAW 
@@ -227,6 +300,7 @@ function draw() {
     bird.draw();
     getReady.draw();
     gameOver.draw();
+    score.draw();
     //
 
 
