@@ -22,6 +22,21 @@ const bg = {
     }
 
 }
+// LOAD OUND
+const SCORE_S = new Audio();
+SCORE_S.src = "audio/sfx_point.wav"
+
+const FLAP = new Audio();
+FLAP.src = "audio/sfx_flap.wav"
+
+const HIT = new Audio();
+HIT.src = "audio/sfx_hit.wav"
+
+const SWOOSHING = new Audio();
+SWOOSHING.src = "audio/sfx_swooshing.wav"
+
+const DIE = new Audio();
+DIE.src = "audio/sfx_die.wav"
 
 
 // GAME STATE
@@ -45,9 +60,11 @@ cvs.addEventListener("click", function (evt) {
     switch (state.current) {
         case state.getReady:
             state.current = state.game;
+            SWOOSHING.play();
             break;
         case state.game:
             bird.flap();
+            FLAP.play();
             break;
         case state.over:
             let rect = cvs.getBoundingClientRect();
@@ -105,8 +122,8 @@ const bird = {
     radius: 12,
     frame: 0,
 
-    gravity : 0.25,
-    jump : 3.5,
+    gravity : 0.15,
+    jump : 2.5,
     speed : 0,
     rotation : 0,
 
@@ -144,7 +161,7 @@ const bird = {
                 this.y = cvs.height - fg.h - this.h/2;
                 if(state.current == state.game){
                     state.current = state.over;
-                    
+                    DIE.play();
                 }
             }
             // Nếu tốc độ lớn hơn độ nhảy thì thua 
@@ -241,19 +258,21 @@ const pipes = {
             if(bird.x + bird.radius > p.x && bird.x - bird.radius < p.x + this.w
                 && bird.y + bird.radius > p.y && bird.y - bird.radius < p.y + this.h){
                     state.current = state.over;
+                    HIT.play();
                 }
                 // Bottom pipe 
             if(bird.x + bird.radius > p.x && bird.x - bird.radius < p.x + this.w
                 && bird.y + bird.radius > bottomPipeYPos && bird.y - bird.radius < bottomPipeYPos + this.h){
                     state.current = state.over;
+                    HIT.play();
                 } 
                 // Move the pipes to the left 
                 p.x -= this.dx;
-            // Nếu 
+            //  
             if(p.x + this.w <= 0){
                 this.position.shift();
                 score.value += 1;
-
+                SCORE_S.play();
                 score.best = Math.max(score.value, score.best);
                 localStorage.setItem("best", score.best);
             }
