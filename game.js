@@ -11,6 +11,7 @@ const bg = {
     sX: 0,
     sY: 0,
     w: 275,
+    
     h: 226,
     x: 0,
     y: cvs.height - 226,
@@ -22,7 +23,12 @@ const bg = {
     }
 
 }
+
+// ádfsdfsdf
 // LOAD OUND
+
+
+
 const SCORE_S = new Audio();
 SCORE_S.src = "audio/sfx_point.wav"
 
@@ -122,7 +128,7 @@ const bird = {
     radius: 12,
     frame: 0,
 
-    gravity : 0.5,
+    gravity : 0.15,
     jump : 2.5,
     speed : 0,
     rotation : 0,
@@ -178,6 +184,8 @@ const bird = {
         this.speed = 0;
     }
 }
+
+///fffff
 
 const getReady = {
     sX: 0,
