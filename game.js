@@ -23,6 +23,9 @@ const bg = {
 
 }
 // LOAD OUND
+
+
+
 const SCORE_S = new Audio();
 SCORE_S.src = "audio/sfx_point.wav"
 
@@ -178,6 +181,8 @@ const bird = {
         this.speed = 0;
     }
 }
+
+///fffff
 
 const getReady = {
     sX: 0,
