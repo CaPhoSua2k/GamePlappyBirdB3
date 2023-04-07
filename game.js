@@ -11,6 +11,7 @@ const bg = {
     sX: 0,
     sY: 0,
     w: 275,
+    
     h: 226,
     x: 0,
     y: cvs.height - 226,
@@ -22,6 +23,8 @@ const bg = {
     }
 
 }
+
+// ádfsdfsdf
 // LOAD OUND
 
 
