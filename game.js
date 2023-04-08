@@ -24,7 +24,6 @@ const bg = {
 
 }
 
-// ádfsdfsdf
 // LOAD OUND
 
 
