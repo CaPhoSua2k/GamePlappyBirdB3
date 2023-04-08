@@ -6,7 +6,7 @@ const DEGREE = Math.PI/180;
 
 const sprite = new Image();
 sprite.src = "img/sprite.png";
-
+//ffffff
 const bg = {
     sX: 0,
     sY: 0,
